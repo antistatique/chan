@@ -9,6 +9,7 @@ import { gitUrlParse } from '@geut/git-url-parse'
 import { createLogger, hasWarnings } from '../logger.js'
 import { createGithubRelease } from './gh-release.js'
 import { write } from '../vfs.js'
+import { executeHook } from '../hooks.js';
 
 export const command = 'release <semver>'
 export const description = 'Create a new release on your CHANGELOG.md.'
@@ -149,6 +150,8 @@ export async function handler ({
   } catch (err) {
     return report(err)
   }
+
+  executeHook('release', [version])
 
   success(`New release created. ${version}`)
 }
